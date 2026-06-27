@@ -1,0 +1,104 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ===== Tiket design system =====================================
+   Identity: violet "access-pass" theme, ticket-stub motif,
+   Space Grotesk display + Inter text. Light, high-contrast, product-grade.
+   ============================================================== */
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-grotesk);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-success: hsl(var(--success));
+  --color-destructive: hsl(var(--destructive));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-ink: hsl(var(--ink));
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+:root {
+  --background: 256 56% 98%;
+  --foreground: 256 30% 12%;
+  --ink: 256 40% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 256 30% 12%;
+  --primary: 262 83% 56%; /* violet 600 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 256 30% 95%;
+  --secondary-foreground: 256 30% 18%;
+  --muted: 256 24% 96%;
+  --muted-foreground: 256 12% 45%;
+  --accent: 28 96% 54%; /* warm amber accent (ticket stub) */
+  --accent-foreground: 28 70% 16%;
+  --success: 152 62% 40%;
+  --destructive: 352 78% 52%;
+  --border: 256 24% 90%;
+  --input: 256 24% 89%;
+  --ring: 262 83% 56%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle dotted "venue floor" backdrop for hero sections */
+.tk-grid {
+  background-image: radial-gradient(hsl(var(--primary) / 0.1) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Ticket-stub card: perforated notch on the left edge — the brand motif */
+.tk-stub {
+  position: relative;
+  background: hsl(var(--card));
+}
+.tk-stub::before,
+.tk-stub::after {
+  content: "";
+  position: absolute;
+  left: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+}
+.tk-stub::before {
+  top: -11px;
+}
+.tk-stub::after {
+  bottom: -11px;
+}
+
+.tk-perf {
+  border-left: 2px dashed hsl(var(--border));
+}

@@ -1,0 +1,17 @@
+[package]
+name = "tiket-ticketing"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "MIT"
+description = "Soroban contract: on-chain event ticketing — escrow buy, organizer check-in, pre-event refund (Tiket)."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = "22"
+
+[dev-dependencies]
+soroban-sdk = { version = "22", features = ["testutils"] }
