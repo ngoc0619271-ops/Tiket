@@ -41,8 +41,8 @@ export default function StatsPage() {
   const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
-    get<{ stats: Stats }>('/api/stats')
-      .then((d) => setStats(d.stats))
+    get<Stats>('/api/stats')
+      .then(setStats)
       .catch(() => setStats(null));
   }, []);
 

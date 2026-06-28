@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const stats = await statsService.getStats();
-    return ok({ stats });
+    return ok(stats);
   } catch (err) {
     return fromError(err);
   }
