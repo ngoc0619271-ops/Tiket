@@ -18,20 +18,20 @@ On-chain event ticketing on Stellar. The ticket price is escrowed inside a Sorob
 ```
 
 <p align="center">
-<img src="../screen-shot/01-landing.jpg" alt="Landing" width="780" />
+<img src="screen-shot/01-landing.jpg" alt="Landing" width="780" />
 </p>
 <p align="center">
-<img src="../screen-shot/04-create-event.jpg" alt="Create event (organizer signs create_event)" width="390" />
-<img src="../screen-shot/05-buy.jpg" alt="Buy a pass (price escrows into the contract)" width="390" />
+<img src="screen-shot/04-create-event.jpg" alt="Create event (organizer signs create_event)" width="390" />
+<img src="screen-shot/05-buy.jpg" alt="Buy a pass (price escrows into the contract)" width="390" />
 </p>
 <p align="center">
-<img src="../screen-shot/06-success.jpg" alt="On-chain success with explorer link" width="390" />
-<img src="../screen-shot/07-stats.jpg" alt="Live usage stats" width="390" />
+<img src="screen-shot/06-success.jpg" alt="On-chain success with explorer link" width="390" />
+<img src="screen-shot/07-stats.jpg" alt="Live usage stats" width="390" />
 </p>
 <p align="center">
-<img src="../screen-shot/02-connect-popup.jpg" alt="Freighter connect" width="260" />
-<img src="../screen-shot/03-approve.jpg" alt="Freighter sign" width="260" />
-<img src="../screen-shot/08-mobile.jpg" alt="Mobile" width="240" />
+<img src="screen-shot/02-connect-popup.jpg" alt="Freighter connect" width="260" />
+<img src="screen-shot/03-approve.jpg" alt="Freighter sign" width="260" />
+<img src="screen-shot/08-mobile.jpg" alt="Mobile" width="240" />
 </p>
 
 ---
@@ -52,6 +52,23 @@ On-chain event ticketing on Stellar. The ticket price is escrowed inside a Sorob
 | Double-spend guard | contract state machine | a ticket is checked-in or refunded at most once |
 
 Every core write is a **build XDR → Freighter sign → submit** round-trip through Soroban RPC; on-chain routes run `maxDuration=60`.
+
+## Live usage
+
+Real interaction counts from this deployment. Demo keys are excluded.
+
+![Live platform stats](screenshots/stats.jpg)
+
+| Metric | Value | Notes |
+|---|---|---|
+| Wallets connected | 50 | distinct SEP-10 sign-ins |
+| Total sign-ins | 62 | sessions created |
+| Events created | 8 | registered on the contract |
+| Passes bought | 6 | escrowed on-chain |
+| Check-ins | 3 | attendees admitted |
+| On-chain settlements | 2 | escrow released to organizers |
+
+Pulled live from `GET /api/stats` and rendered at [`/stats`](https://tiket-mu.vercel.app/stats).
 
 ---
 
