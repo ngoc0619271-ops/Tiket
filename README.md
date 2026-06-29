@@ -71,6 +71,11 @@ Real interaction counts from this deployment. Demo keys are excluded.
 Pulled live from `GET /api/stats` and rendered at [`/stats`](https://tiket-mu.vercel.app/stats).
 
 ---
+## Demo & Pitch Deck
+
+- **Demo Video:** [Watch Demo](https://drive.google.com/file/d/1YwtmXtcvZIHolRWL_39WqAhI4WpOZt2S/view?usp=drive_link)
+- **Pitch Deck:** [View Pitch Deck](https://drive.google.com/file/d/12QLhfLLWeifCqiv9Z-Pt3UYUjiUf35Dr/view?usp=drive_link)
+---
 
 ## Contract entrypoints
 
