@@ -43,7 +43,7 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
           <div className="flex flex-col justify-center">
             <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary">
-              <BadgeCheck className="h-4 w-4" /> Built on Stellar testnet
+              <BadgeCheck className="h-4 w-4" /> Built on Stellar {process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'public' ? 'mainnet' : 'testnet'}
             </span>
             <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl">
               Tickets that <span className="text-primary">can&apos;t be faked</span>,

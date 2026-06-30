@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useWallet } from '@/components/wallet-provider';
 import { ApiError, post } from '@/lib/api';
 import { type EventDTO, formatPrice } from '@/lib/format';
+import { APP_NETWORK } from '@/lib/stellar-client';
 
 type Phase = 'form' | 'working' | 'done';
 
@@ -149,7 +150,7 @@ export function PurchaseDialog({
             </Button>
             <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5" /> One wallet signature. Escrowed by the Soroban
-              contract on Stellar testnet. Refundable before the event.
+              contract on Stellar {APP_NETWORK === 'public' ? 'mainnet' : 'testnet'}. Refundable before the event.
             </p>
           </div>
         )}

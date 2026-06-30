@@ -18,7 +18,9 @@ const envSchema = z.object({
   SOROBAN_CONTRACT_ID: z
     .string()
     .default('CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4'),
-  // Native XLM Stellar Asset Contract (testnet) — settlement token, no trustline needed.
+  // Native XLM Stellar Asset Contract — settlement token, no trustline needed.
+  // MUST be set per-network. The default below is the testnet XLM SAC — overwrite
+  // on mainnet with `stellar contract id asset --asset native --network public`.
   SOROBAN_TOKEN_SAC: z.string().default('CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC'),
   NEXT_PUBLIC_SOROBAN_CONTRACT_ID: z
     .string()
