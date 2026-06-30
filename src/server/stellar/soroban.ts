@@ -52,7 +52,7 @@ async function buildInvoke(source: string, method: string, ...args: xdr.ScVal[])
   } catch {
     throw new AppError(
       'INVALID_INPUT',
-      'Wallet account not found on-chain. Fund it with testnet XLM first.',
+      'Wallet account not found on-chain. Fund it with XLM first.',
       400,
     );
   }
@@ -61,7 +61,7 @@ async function buildInvoke(source: string, method: string, ...args: xdr.ScVal[])
     networkPassphrase: NETWORK_PASSPHRASE,
   })
     .addOperation(contract.call(method, ...args))
-    .setTimeout(180)
+    .setTimeout(600)
     .build();
 
   try {
@@ -147,8 +147,8 @@ export async function submitAndPoll(signedXdr: string): Promise<SubmitResult> {
   }
   if (!hash) throw new AppError('CONFLICT', 'Network was busy (try again later).', 409);
 
-  // Poll for confirmation (up to ~50s, inside the route's maxDuration=60).
-  const deadline = Date.now() + 50_000;
+  // Poll for confirmation (up to ~55s, inside the route's maxDuration=60).
+  const deadline = Date.now() + 55_000;
   let got = await server.getTransaction(hash);
   while (got.status === 'NOT_FOUND' && Date.now() < deadline) {
     await sleep(1500);

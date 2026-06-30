@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { ConnectButton } from '@/components/connect-button';
+import { NetworkBadge } from '@/components/network-badge';
 import { cn } from '@/lib/utils';
 
 const nav = [
@@ -46,6 +47,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <NetworkBadge />
           <div className="hidden sm:block">
             <ConnectButton size="sm" />
           </div>

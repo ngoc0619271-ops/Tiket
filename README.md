@@ -5,9 +5,9 @@ On-chain event ticketing on Stellar. The ticket price is escrowed inside a Sorob
 | | |
 |---|---|
 | **Product** | Tiket — escrow ticketing + on-chain settlement/refund |
-| **Live** | https://tiket-mu.vercel.app (Vercel production) |
-| **Network** | Stellar **testnet** only (`Test SDF Network ; September 2015`) |
-| **Contract** | `CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4` ([stellar.expert](https://stellar.expert/explorer/testnet/contract/CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4)) |
+| **Live** | https://tiket-stellar.vercel.app (Vercel production) |
+| **Network** | Stellar **mainnet** (`Public Global Stellar Network ; September 2015`) |
+| **Contract** | `CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I` ([stellar.expert](https://stellar.expert/explorer/public/contract/CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I)) |
 | **Settlement** | native XLM via SAC (USDC opt-in trustline helper) |
 | **Stack** | Next.js 16 / React 19 / TS · Soroban (`soroban-sdk` 22, Rust) · Drizzle + Postgres · Freighter |
 | **Auth** | SEP-10-style challenge → Freighter sign → session cookie |
@@ -68,13 +68,8 @@ Real interaction counts from this deployment. Demo keys are excluded.
 | Check-ins | 3 | attendees admitted |
 | On-chain settlements | 2 | escrow released to organizers |
 
-Pulled live from `GET /api/stats` and rendered at [`/stats`](https://tiket-mu.vercel.app/stats).
+Pulled live from `GET /api/stats` and rendered at [`/stats`](https://tiket-stellar.vercel.app/stats).
 
----
-## Demo & Pitch Deck
-
-- **Demo Video:** [Watch Demo](https://drive.google.com/file/d/1YwtmXtcvZIHolRWL_39WqAhI4WpOZt2S/view?usp=drive_link)
-- **Pitch Deck:** [View Pitch Deck](https://drive.google.com/file/d/12QLhfLLWeifCqiv9Z-Pt3UYUjiUf35Dr/view?usp=drive_link)
 ---
 
 ## Contract entrypoints
@@ -98,16 +93,17 @@ Rust, `soroban-sdk` 22, 15 passing unit tests. Source: [`contracts/tiket-ticketi
 
 Auth is enforced with `require_auth`; the source-account signature on the submitted tx covers both the contract call and its inner SAC transfer. Free events (`price == 0`) skip the token transfer. Instance + entry storage TTLs are bumped on every write so pending escrow never expires.
 
-### On-chain deploy facts
+### On-chain deploy facts (mainnet)
 
 | | |
 |---|---|
-| Wasm hash | `7603595e9c3541f66d7ef65f5ed51a895162433241eab8303a646ce7c55a8044` |
-| Admin / deployer | `GBL5RJKF4QNJ4ZPLJZ7PS7K5A4J44VEZJRV2CRTFFDRVSY2N76AIIE47` |
-| Settlement token (XLM SAC) | `CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC` |
-| Soroban RPC | `https://soroban-testnet.stellar.org` |
-| Deploy tx | `87d1c27049f9f624b15530834519e9d4b1086696132bbbe94c3fe219e7c12254` |
-| Init tx | `c99085f95344327f33b08198506c41fccd20f7a8f1dd4a1246fd07337f06a256` |
+| Wasm hash | `781e2616387a68e4f90f96011f72574862fdbf96edcc8f8661970b921b47ccfe` |
+| Admin / deployer | `GDVSK3WR5N5LVMBPHVX6VXCJLLKA5YBUG236G5EYDVV2PTNU6MIZRZ2M` |
+| Settlement token (XLM SAC) | `CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA` |
+| Soroban RPC | `https://mainnet.sorobanrpc.com` |
+| Deploy tx | `d1745e753ffc771feb2c134931c6225990ad07b7a6f58101dcc85e0259ec418a` |
+| Init tx | `a02333cd0be96c36c602887645eb0deed8f301633e73cc79b6dcde47bdddccb4` |
+| First `create_event` tx (Stellar Hackathon) | `63466df584e64a35174230d88397f75ca554b62bd11351dc73aa3b2eeb4643bb` |
 
 ---
 
@@ -156,8 +152,8 @@ All responses use the `{ ok, data }` / `{ ok, error }` envelope.
 
 | Asset | Identifier | Role |
 |---|---|---|
-| XLM (native) | SAC `CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC` | default settlement token; no trustline |
-| USDC (testnet) | issuer `GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5` | opt-in trustline via `/api/usdc/*` |
+| XLM (native) | SAC `CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA` | default settlement token; no trustline |
+| USDC (mainnet) | issuer `GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN` | opt-in trustline via `/api/usdc/*` |
 
 ---
 
@@ -219,27 +215,30 @@ pnpm dev        # http://localhost:3001
 
 ```bash
 cd contracts
-cargo +1.89.0 test                                                   # 15 passing
-cargo +1.89.0 build --release --target wasm32-unknown-unknown
+cargo +1.89.0-x86_64-pc-windows-gnu test                                # unit tests
+cargo +1.89.0-x86_64-pc-windows-gnu build --release --target wasm32-unknown-unknown
 stellar contract optimize --wasm target/wasm32-unknown-unknown/release/tiket_ticketing.wasm
-stellar contract deploy --wasm <optimized.wasm> --source tiket-deployer --network testnet
-stellar contract invoke --id <CID> --source tiket-deployer --network testnet -- \
-  initialize --admin <ADMIN> --token CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC
+
+# Testnet (auto-resolves XLM SAC + funds the deployer via friendbot):
+NETWORK=testnet IDENTITY=tiket-deployer bash scripts/deploy.sh
+
+# Mainnet (costs real XLM; deployer must be pre-funded):
+NETWORK=mainnet IDENTITY=tiket-main bash scripts/deploy.sh
 ```
 
 ### e2e against the live deploy
 
 ```bash
-PLAYWRIGHT_BASE_URL=https://tiket-mu.vercel.app pnpm test:e2e
+PLAYWRIGHT_BASE_URL=https://tiket-stellar.vercel.app pnpm test:e2e
 ```
 
 The e2e drives the deployed app through the `@stellar/freighter-api` v6 postMessage bridge, signing with a testnet key in Node.
 
 ---
 
-## Mainnet readiness
+## Mainnet
 
-The app is fully network-driven (`STELLAR_NETWORK` / `NEXT_PUBLIC_STELLAR_NETWORK`), so a flip to `public` swaps Horizon, RPC, passphrase, and the USDC issuer automatically. The contract is **testnet only** — going to mainnet means redeploy + re-`initialize` against the mainnet XLM SAC, then point `SOROBAN_CONTRACT_ID` at the new id. Switch steps are recorded in [`contracts/DEPLOYMENT.md`](contracts/DEPLOYMENT.md). **Not deployed to mainnet.**
+Live on **Stellar mainnet**. The app is network-driven (`STELLAR_NETWORK` / `NEXT_PUBLIC_STELLAR_NETWORK`), so the same code paths run against mainnet by flipping the env vars and pointing at the deployed contract id above. The first on-chain event is **Stellar Hackathon** (`onchain_event_id=1`, APAC, 30/7/2026, capacity 100, price 0.01 XLM) — created live with the deployer key above. Switch steps for testnet ↔ mainnet are in [`contracts/DEPLOYMENT.md`](contracts/DEPLOYMENT.md).
 
-<sub>Built for the Stellar APAC hackathon · testnet only · money held by the contract, never a middleman.</sub>
+<sub>Built for the Stellar APAC hackathon · live on Stellar mainnet · money held by the contract, never a middleman.</sub>
 </content>

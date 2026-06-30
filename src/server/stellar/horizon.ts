@@ -27,7 +27,7 @@ async function loadAccount(publicKey: string) {
     if (status === 404) {
       throw new AppError(
         'INVALID_INPUT',
-        'Wallet account not found on the network. Fund it with testnet XLM first.',
+        'Wallet account not found on the network. Fund it with XLM first.',
         400,
       );
     }
@@ -79,7 +79,7 @@ export async function buildEnableUsdcXdr(account: string): Promise<string> {
     networkPassphrase: NETWORK_PASSPHRASE,
   })
     .addOperation(Operation.changeTrust({ asset: usdcAsset(), limit: '1000000' }))
-    .setTimeout(180)
+    .setTimeout(600)
     .build()
     .toXDR();
 }
@@ -102,7 +102,7 @@ export async function issueTicketToken(params: {
         amount: '1',
       }),
     )
-    .setTimeout(120)
+    .setTimeout(300)
     .build();
   tx.sign(issuer);
   try {
@@ -131,7 +131,7 @@ export async function clawbackTicketToken(params: {
         amount: '1',
       }),
     )
-    .setTimeout(120)
+    .setTimeout(300)
     .build();
   tx.sign(issuer);
   try {

@@ -8,7 +8,10 @@ export function SiteFooter() {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <TicketCheck className="h-4 w-4 text-primary" />
           <span className="font-display font-semibold text-foreground">Tiket</span>
-          <span>— on-chain escrow event passes on Stellar testnet.</span>
+          <span>
+            — on-chain escrow event passes on Stellar{' '}
+            {process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'public' ? 'mainnet' : 'testnet'}.
+          </span>
         </div>
         <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted-foreground">
           <Link href="/events" className="hover:text-foreground">
