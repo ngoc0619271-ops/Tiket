@@ -6,6 +6,7 @@ On-chain event ticketing on Stellar. The ticket price is escrowed inside a Sorob
 |---|---|
 | **Product** | Tiket — escrow ticketing + on-chain settlement/refund |
 | **Live** | https://tiket-stellar.vercel.app (Vercel production) |
+| **Tw** | https://x.com/TiketXLM |
 | **Network** | Stellar **mainnet** (`Public Global Stellar Network ; September 2015`) |
 | **Contract** | `CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I` ([stellar.expert](https://stellar.expert/explorer/public/contract/CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I)) |
 | **Settlement** | native XLM via SAC (USDC opt-in trustline helper) |
