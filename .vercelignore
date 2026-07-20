@@ -1,0 +1,6 @@
+# Rust build artifacts — must NOT be uploaded to Vercel (100 MB upload cap).
+contracts/target
+contracts/target/
+**/target/
+**/Cargo.lock
+**/*.wasm
