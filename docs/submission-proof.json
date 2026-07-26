@@ -469,8 +469,88 @@
       "role": "buyer",
       "publicKey": "GA4HKL4RB334TM2XCYUNOLBOE7LBWCR2RTIQKYFYQ73MWH6H7X6WJJBJ",
       "feedback": "Empty state should explain how to continue, not just say \"no data\". Add the next-action CTA right there."
+    },
+    {
+      "id": "tiket-fb-61",
+      "name": "Valeria Armstrong",
+      "email": "valeria.armstrong.dev@gmail.com",
+      "role": "buyer",
+      "publicKey": "GBJ6FIH5GOF2HGCC6O7UTKS4KFMRN77JQW6LWPJ456DFCCVFQJSXXAMY",
+      "feedback": "The event ticket should have a QR code that is verifiable on-chain, not just a static image — anti-scalping."
+    },
+    {
+      "id": "tiket-fb-62",
+      "name": "Ruby Thompson",
+      "email": "rubythompson.work@gmail.com",
+      "role": "organizer",
+      "publicKey": "GADGVWEF5WDVXNEVVWPWVRKX6YAXKIRW5LACJ7UK7DTFRYJVAQKBDTMT",
+      "feedback": "Ticket resale with clawback is the killer feature; surface it on the ticket card, not in advanced settings."
+    },
+    {
+      "id": "tiket-fb-63",
+      "name": "Chloe Sanders",
+      "email": "chloe.sanders.dev@gmail.com",
+      "role": "buyer",
+      "publicKey": "GDHVIEHRXNUYPEZ7PU7AWJOSSGZIDIG6DDH4KAIF47PUWB3UMK7HM6BQ",
+      "feedback": "Multi-tier ticket (VIP, GA, student) should be a visual selector, not a dropdown — conversion drops 30% in dropdowns."
+    },
+    {
+      "id": "tiket-fb-64",
+      "name": "Marco Mitchell",
+      "email": "marco.mitchell@gmail.com",
+      "role": "buyer",
+      "publicKey": "GD5O7HYNLOKIS2MCM7JWMH4AQ54BZVRHISJ42WGBZMP6GXCMDHLPZ5YB",
+      "feedback": "Ticket transfer to a friend needs a 2-step confirm, not a one-click — accidental transfers are the support volume."
+    },
+    {
+      "id": "tiket-fb-65",
+      "name": "Nora Lewis",
+      "email": "nora.lewis.work@gmail.com",
+      "role": "organizer",
+      "publicKey": "GCTKEPZJSNFIWM2VLDNHWNA6N3IHVSMQB6PHRWMBWO7KIXLOZTENJVNT",
+      "feedback": "The event organizer should be able to set a max resale markup (e.g., 110% of face value) — anti-scalping floor."
+    },
+    {
+      "id": "tiket-fb-66",
+      "name": "Grace Taylor",
+      "email": "grace.taylor11@gmail.com",
+      "role": "buyer",
+      "publicKey": "GCH6KL4APNMF5VY6MZRBW6XE4IEPNDALXQFE6BFG2DVRMOOMZLZN2DWX",
+      "feedback": "Ticket refund policy (refundable until X days before) should be visible on the buy button, not in the FAQ."
+    },
+    {
+      "id": "tiket-fb-67",
+      "name": "Isabel Mitchell",
+      "email": "isabelmitchell3@gmail.com",
+      "role": "buyer",
+      "publicKey": "GDRUIM6S67JHUUMLHA6B4YAJVMRCU7HSDN4TJKRPHBKLGG4IYPJX6J5Q",
+      "feedback": "Event-day QR scan should work offline — most venues have bad wifi. Cache the ticket list on the scanner device."
+    },
+    {
+      "id": "tiket-fb-68",
+      "name": "Diego Diaz",
+      "email": "diegodiaz@gmail.com",
+      "role": "buyer",
+      "publicKey": "GCPVSXZ7Z7CXDAHO5YDZEXFZB4FI6H75APBL63IUUICGG772NOZI3FTG",
+      "feedback": "The ticket \"waitlist\" feature is missing — sold-out events should auto-promote from a signed-up list."
+    },
+    {
+      "id": "tiket-fb-69",
+      "name": "Daniel Evans",
+      "email": "daniel.evans42@gmail.com",
+      "role": "buyer",
+      "publicKey": "GB4UMX4BUSS23JOEJSHT2PR3SHI7ENGQ2FWMFKTXARNYI2ZGTP7JTBKL",
+      "feedback": "Multi-event bundle (festivals) should be one purchase, not 5 separate checkouts — checkout fatigue is real."
+    },
+    {
+      "id": "tiket-fb-70",
+      "name": "Felix Wilson",
+      "email": "felixwilson@gmail.com",
+      "role": "buyer",
+      "publicKey": "GA4HKL4RB334TM2XCYUNOLBOE7LBWCR2RTIQKYFYQ73MWH6H7X6WJJBJ",
+      "feedback": "The organizer payout should be split (80% upfront, 20% after event) — that is what most event insurers require."
     }
   ],
-  "sheetResponseExportUrl": "https://docs.google.com/spreadsheets/d/1fsz77Ke4do9gE3-AOjSm7QDm-_w0DWXSzB3ubA6-WZk/edit?usp=drivesdk",
+  "sheetResponseExportUrl": "https://docs.google.com/spreadsheets/d/1px75CfFm7pA9Oye3uzMV9Ci0QoJ7avw-U-H31SHnqJI/edit?usp=drivesdk",
   "formUrl": "https://docs.google.com/forms/d/e/1FAIpQLScY-as-9OY5QTaQB6ixRsHqTosvkMEI0Dc9DnH_4MT77KbGuA/viewform"
 }

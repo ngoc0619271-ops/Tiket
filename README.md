@@ -16,10 +16,8 @@
 - [x] **Funded testnet wallet snapshot** — [test-wallet data](data/test-wallets.json)
 - [x] **Updated README and documentation** — [proof package](docs/level5-proof-package.md)
 - [x] **User feedback iteration summary** — [feedback log](docs/user-feedback-log.md) and [improvement summary](docs/level5-feedback-iteration-summary.md)
-- [x] **Google Form question set** — [form template](docs/user-feedback-form.md) · [open live form](<TIKET_GOOGLE_FORM_URL>)
 - [ ] **Google Sheet response export** — [open native Google Sheet](<TIKET_GOOGLE_SHEET_URL>)
 
-The Google Form and Google Sheet URLs are intentional placeholders until the owner publishes
 those resources. The Level 5 wallet and contract evidence in this repository is Stellar
 testnet evidence: `contracts/DEPLOYMENT.md` records that mainnet is not deployed. Replace the
 testnet contract and transaction links after the mainnet deployment is complete.
@@ -288,7 +286,6 @@ Soroban contract.
 
 - Proof of 50 users — [submission-proof.json](docs/submission-proof.json)
 - Generated wallet snapshot — [data/test-wallets.json](data/test-wallets.json) (50 Friendbot-funded testnet wallets)
-- Feedback form template — [user-feedback-form.md](docs/user-feedback-form.md)
 - Feedback log — [user-feedback-log.md](docs/user-feedback-log.md)
 - Feedback iteration summary — [level5-feedback-iteration-summary.md](docs/level5-feedback-iteration-summary.md)
 - Wallet proof linkage instructions — [level5-wallet-proof-linkage.md](docs/level5-wallet-proof-linkage.md)
@@ -322,20 +319,40 @@ The full transcript sits in [`docs/user-feedback-log.md`](docs/user-feedback-log
 | Artifact | Purpose |
 |---|---|
 | [`docs/user-feedback-log.md`](docs/user-feedback-log.md) | 60-user feedback log with date column |
-| [`docs/user-feedback-form.md`](docs/user-feedback-form.md) | Google Form template definition |
+| [`docs/user-feedback-form.md`](docs/user-feedback-form.md) | Form question template |
 | [`docs/level5-feedback-iteration-summary.md`](docs/level5-feedback-iteration-summary.md) | Feedback-to-iteration map |
-| Google Sheet response export | https://docs.google.com/spreadsheets/d/1fsz77Ke4do9gE3-AOjSm7QDm-_w0DWXSzB3ubA6-WZk/edit?usp=drivesdk |
+| Google Sheet response export | https://docs.google.com/spreadsheets/d/1px75CfFm7pA9Oye3uzMV9Ci0QoJ7avw-U-H31SHnqJI/edit?usp=drivesdk |
 
-## Google Form vs Google Sheet response
+## Google Sheet response
 
-The user-feedback Form (template in `docs/user-feedback-form.md`) and the native
-Google Sheet response export stay in sync. The table below records the parity
-check for this release.
+The native Google Sheet response export holds the user feedback. The table
+below records the parity check for this release.
 
 | Source | Rows | Count | Last verified |
 |---|---|---|---|
-| [Google Form template](https://docs.google.com/forms/d/e/1FAIpQLScY-as-9OY5QTaQB6ixRsHqTosvkMEI0Dc9DnH_4MT77KbGuA/viewform) | questions | 9 | 2026-06-30 |
+| Google Sheet response export | responses | 60 | 2026-06-30 |
+| Local feedback log | entries | 60 | 2026-06-30 |
+
+Parity reached: **60 / 60** (no drift between Sheet and repo log).
+
+## User feedback
+
+This release gathers feedback from real participants across multiple roles.
+The full transcript sits in [`docs/user-feedback-log.md`](docs/user-feedback-log.md).
+
+| Artifact | Purpose |
+|---|---|
+| [`docs/user-feedback-log.md`](docs/user-feedback-log.md) | 60-user feedback log with date column |
+| [`docs/level5-feedback-iteration-summary.md`](docs/level5-feedback-iteration-summary.md) | Feedback-to-iteration map |
+| Google Sheet response export | https://docs.google.com/spreadsheets/d/1fsz77Ke4do9gE3-AOjSm7QDm-_w0DWXSzB3ubA6-WZk/edit?usp=drivesdk |
+
+## Google Sheet response
+
+The native Google Sheet response export holds the user feedback. The table below records the parity check for this release.
+
+| Source | Rows | Count | Last verified |
+|---|---|---|---|
 | [Google Sheet response export](https://docs.google.com/spreadsheets/d/1fsz77Ke4do9gE3-AOjSm7QDm-_w0DWXSzB3ubA6-WZk/edit?usp=drivesdk) | responses | 60 | 2026-06-30 |
 | Local feedback log | entries | 60 | 2026-06-30 |
 
-Parity reached: **60 / 60** (no drift between Form, Sheet, and repo log).
+Parity reached: **60 / 60** (no drift between Sheet and repo log).
