@@ -16,7 +16,7 @@
 - [x] **Funded testnet wallet snapshot** — [test-wallet data](data/test-wallets.json)
 - [x] **Updated README and documentation** — [proof package](docs/level5-proof-package.md)
 - [x] **User feedback iteration summary** — [feedback log](docs/user-feedback-log.md) and [improvement summary](docs/level5-feedback-iteration-summary.md)
-- [ ] **Google Sheet response export** — [open native Google Sheet](<TIKET_GOOGLE_SHEET_URL>)
+- [x] **Google Sheet response export** — [open native Google Sheet](https://docs.google.com/spreadsheets/d/1px75CfFm7pA9Oye3uzMV9Ci0QoJ7avw-U-H31SHnqJI/edit?usp=drivesdk)
 
 those resources. The Level 5 wallet and contract evidence in this repository is Stellar
 testnet evidence: `contracts/DEPLOYMENT.md` records that mainnet is not deployed. Replace the
