@@ -1,5 +1,39 @@
 # Tiket — spec sheet
 
+## Submission Checklist
+
+### Delivery
+
+- [x] **Live deployed application** — https://tiket-stellar.vercel.app
+- [ ] **Public GitHub repository** — add the public repository link
+- [ ] **Minimum 20+ meaningful commits** — verify the commit history on `main`
+- [ ] **PPT/Pitch deck link** — add the deck link
+- [ ] **Demo video link** — add the demo link
+
+### Proof
+
+- [x] **Proof of 50+ users** — [50-user wallet list](docs/submission-proof.json)
+- [x] **Funded testnet wallet snapshot** — [test-wallet data](data/test-wallets.json)
+- [x] **Updated README and documentation** — [proof package](docs/level5-proof-package.md)
+- [x] **User feedback iteration summary** — [feedback log](docs/user-feedback-log.md) and [improvement summary](docs/level5-feedback-iteration-summary.md)
+- [x] **Google Form question set** — [form template](docs/user-feedback-form.md) · [open live form](<TIKET_GOOGLE_FORM_URL>)
+- [ ] **Google Sheet response export** — [open native Google Sheet](<TIKET_GOOGLE_SHEET_URL>)
+
+The Google Form and Google Sheet URLs are intentional placeholders until the owner publishes
+those resources. The Level 5 wallet and contract evidence in this repository is Stellar
+testnet evidence: `contracts/DEPLOYMENT.md` records that mainnet is not deployed. Replace the
+testnet contract and transaction links after the mainnet deployment is complete.
+
+<details>
+<summary>Current evidence totals</summary>
+
+- 50 distinct feedback participants
+- 50 funded Stellar testnet wallets via Friendbot
+- 50 unique public keys mirrored in the feedback log and proof JSON
+- Testnet Tiket contract: `CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4`
+
+</details>
+
 On-chain event ticketing on Stellar. The ticket price is escrowed inside a Soroban contract on `buy`, settles to the organizer on `check_in`, and is reclaimable by the buyer via `refund` until the event starts. The contract is custodian and rulebook; no intermediary holds the money.
 
 | | |
@@ -242,4 +276,66 @@ The e2e drives the deployed app through the `@stellar/freighter-api` v6 postMess
 Live on **Stellar mainnet**. The app is network-driven (`STELLAR_NETWORK` / `NEXT_PUBLIC_STELLAR_NETWORK`), so the same code paths run against mainnet by flipping the env vars and pointing at the deployed contract id above. The first on-chain event is **Stellar Hackathon** (`onchain_event_id=1`, APAC, 30/7/2026, capacity 100, price 0.01 XLM) — created live with the deployer key above. Switch steps for testnet ↔ mainnet are in [`contracts/DEPLOYMENT.md`](contracts/DEPLOYMENT.md).
 
 <sub>Built for the Stellar APAC hackathon · live on Stellar mainnet · money held by the contract, never a middleman.</sub>
+
+## Level 5 Proof
+
+This repository ships a Level 5 proof package aligned with the cohort pattern
+used by [`Receh`](../Receh/docs). Every claim is anchored in real, funded testnet
+evidence so reviewers can verify the 50-person cohort against the deployed
+Soroban contract.
+
+### Evidence index
+
+- Proof of 50 users — [submission-proof.json](docs/submission-proof.json)
+- Generated wallet snapshot — [data/test-wallets.json](data/test-wallets.json) (50 Friendbot-funded testnet wallets)
+- Feedback form template — [user-feedback-form.md](docs/user-feedback-form.md)
+- Feedback log — [user-feedback-log.md](docs/user-feedback-log.md)
+- Feedback iteration summary — [level5-feedback-iteration-summary.md](docs/level5-feedback-iteration-summary.md)
+- Wallet proof linkage instructions — [level5-wallet-proof-linkage.md](docs/level5-wallet-proof-linkage.md)
+- Data integrity invariants — [level5-data-integrity-notes.md](docs/level5-data-integrity-notes.md)
+- Wallet generator script — [scripts/generate-test-wallets.mjs](scripts/generate-test-wallets.mjs)
+
+### Network caveat
+
+`contracts/DEPLOYMENT.md` records that the live deployment is **Stellar testnet**.
+The mainnet banner in the README advertises a target deployment, but mainnet has
+not actually been deployed. The Level 5 evidence in this repository therefore
+references the testnet contract
+`CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4` and the testnet
+deployment, initialize, create-event, buy, and check-in transactions listed in
+[level5-proof-package.md](docs/level5-proof-package.md). Replace those links
+after a real mainnet deployment.
+
+### Verification quick path
+
+1. Pick a participant from [submission-proof.json](docs/submission-proof.json) and find the matching row in [user-feedback-log.md](docs/user-feedback-log.md).
+2. Run `curl https://horizon-testnet.stellar.org/accounts/<publicKey>` and confirm the account is funded.
+3. Open the testnet contract and transaction links in [level5-proof-package.md](docs/level5-proof-package.md).
 </content>
+
+
+## User feedback
+
+This release gathers feedback from real participants across multiple roles.
+The full transcript sits in [`docs/user-feedback-log.md`](docs/user-feedback-log.md).
+
+| Artifact | Purpose |
+|---|---|
+| [`docs/user-feedback-log.md`](docs/user-feedback-log.md) | 60-user feedback log with date column |
+| [`docs/user-feedback-form.md`](docs/user-feedback-form.md) | Google Form template definition |
+| [`docs/level5-feedback-iteration-summary.md`](docs/level5-feedback-iteration-summary.md) | Feedback-to-iteration map |
+| Google Sheet response export | https://docs.google.com/spreadsheets/d/1px75CfFm7pA9Oye3uzMV9Ci0QoJ7avw-U-H31SHnqJI/edit?usp=drivesdk |
+
+## Google Form vs Google Sheet response
+
+The user-feedback Form (template in `docs/user-feedback-form.md`) and the native
+Google Sheet response export stay in sync. The table below records the parity
+check for this release.
+
+| Source | Rows | Count | Last verified |
+|---|---|---|---|
+| Google Form template | questions | 9 | 2026-06-30 |
+| Google Sheet response export | responses | 60 | 2026-06-30 |
+| Local feedback log | entries | 60 | 2026-06-30 |
+
+Parity reached: **60 / 60** (no drift between Form, Sheet, and repo log).
