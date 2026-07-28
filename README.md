@@ -1,12 +1,12 @@
 # Tiket — spec sheet
 
-Marketing landing page: [`/landing`](https://tiket-stellar.vercel.app/landing)
+Marketing landing page: [`/landing`](https://tiket-mu.vercel.app/landing)
 
 ## Submission Checklist
 
 ### Delivery
 
-- [x] **Live deployed application** — https://tiket-stellar.vercel.app
+- [x] **Live deployed application** — https://tiket-mu.vercel.app
 - [ ] **Public GitHub repository** — add the public repository link
 - [ ] **Minimum 20+ meaningful commits** — verify the commit history on `main`
 - [ ] **PPT/Pitch deck link** — add the deck link
@@ -39,7 +39,7 @@ On-chain event ticketing on Stellar. The ticket price is escrowed inside a Sorob
 | | |
 |---|---|
 | **Product** | Tiket — escrow ticketing + on-chain settlement/refund |
-| **Live** | https://tiket-stellar.vercel.app (Vercel production) |
+| **Live** | https://tiket-mu.vercel.app (Vercel production) |
 | **Tw** | https://x.com/TiketXLM |
 | **Network** | Stellar **mainnet** (`Public Global Stellar Network ; September 2015`) |
 | **Contract** | `CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I` ([stellar.expert](https://stellar.expert/explorer/public/contract/CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I)) |
@@ -103,7 +103,7 @@ Real interaction counts from this deployment. Demo keys are excluded.
 | Check-ins | 3 | attendees admitted |
 | On-chain settlements | 2 | escrow released to organizers |
 
-Pulled live from `GET /api/stats` and rendered at [`/stats`](https://tiket-stellar.vercel.app/stats).
+Pulled live from `GET /api/stats` and rendered at [`/stats`](https://tiket-mu.vercel.app/stats).
 
 ---
 
@@ -264,7 +264,7 @@ NETWORK=mainnet IDENTITY=tiket-main bash scripts/deploy.sh
 ### e2e against the live deploy
 
 ```bash
-PLAYWRIGHT_BASE_URL=https://tiket-stellar.vercel.app pnpm test:e2e
+PLAYWRIGHT_BASE_URL=https://tiket-mu.vercel.app pnpm test:e2e
 ```
 
 The e2e drives the deployed app through the `@stellar/freighter-api` v6 postMessage bridge, signing with a testnet key in Node.
