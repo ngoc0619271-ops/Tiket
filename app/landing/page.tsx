@@ -3,7 +3,6 @@ import {
   Blocks,
   Building2,
   CheckCircle2,
-  Code2,
   Coins,
   Compass,
   ExternalLink,
@@ -66,6 +65,7 @@ const ecosystemActors = [
     icon: Blocks,
     title: 'Tiket contract',
     body: `The escrow itself, deployed on ${networkLabel} at ${contractShort}. Holds every price until an event resolves.`,
+    highlight: true,
   },
   {
     icon: Globe,
@@ -104,18 +104,22 @@ const contractSteps = [
   {
     fn: 'create_event(organizer, price, capacity, start_time)',
     body: 'Organizer-signed. Sets up the event on-chain. Won’t accept a zero capacity, and won’t accept a start time that’s already in the past.',
+    signer: 'organizer',
   },
   {
     fn: 'buy(event_id, buyer)',
     body: 'Buyer-signed. Moves the price from the buyer into the contract’s own address and logs a Valid ticket. Free events skip that transfer entirely.',
+    signer: 'buyer',
   },
   {
     fn: 'check_in(ticket_id)',
     body: 'Organizer-signed, and only the organizer can call it. Pays the escrowed price out to them and flips the ticket to Used. Won’t run on a ticket that’s already Used or Refunded.',
+    signer: 'organizer',
   },
   {
     fn: 'refund(ticket_id)',
     body: 'Ticket-owner-signed, and only before the event’s start_time. Sends the escrow back to the buyer and flips the ticket to Refunded. Once the event starts, or the ticket’s already moved, this stops working.',
+    signer: 'buyer',
   },
 ];
 
@@ -197,62 +201,63 @@ export default function LandingPage() {
   return (
     <main>
       <section id="intro" className="tk-grid scroll-mt-20 border-b border-border">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
-          <div>
-            <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary">
-              <ShieldCheck className="h-4 w-4" /> Built on Stellar{' '}
-              {process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'public' ? 'mainnet' : 'testnet'}
-            </span>
-            <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl">
-              Admission that <span className="text-primary">settles itself.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-              A Tiket pass isn&apos;t a QR code you screenshot and hope works — it&apos;s an escrow.
-              The price sits inside a Soroban contract from the second you buy until you walk
-              through the door, or until you change your mind.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg">
-                <Link href="/events">
-                  Get a pass <ArrowRight />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <a href={explorerContract()} target="_blank" rel="noopener noreferrer">
-                  Verify the contract <ExternalLink />
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          <div className="mx-auto w-full max-w-sm overflow-visible rounded-2xl border border-border bg-card shadow-xl">
-            <div className="flex items-center justify-between p-6">
-              <div className="flex items-center gap-2 text-primary">
-                <Ticket className="h-5 w-5" />
-                <span className="font-display text-sm font-semibold uppercase tracking-wider">
-                  General admission
-                </span>
-              </div>
-              <QrCode className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <div className="tk-tear" />
-            <div className="p-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Escrow contract
+        <div className="px-4 py-16 sm:px-6 lg:py-24">
+          <div className="mx-auto grid max-w-5xl grid-cols-1 overflow-visible rounded-2xl border border-border bg-card shadow-xl sm:grid-cols-[1fr_auto]">
+            <div className="p-8 sm:p-10 lg:p-12">
+              <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-sm font-medium text-primary">
+                <ShieldCheck className="h-4 w-4" /> Built on Stellar{' '}
+                {process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'public' ? 'mainnet' : 'testnet'}
+              </span>
+              <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-6xl">
+                Admission that <span className="text-primary">settles itself.</span>
+              </h1>
+              <p className="mt-5 max-w-xl text-lg text-muted-foreground">
+                A Tiket pass isn&apos;t a QR code you screenshot and hope works — it&apos;s an
+                escrow. The price sits inside a Soroban contract from the second you buy until you
+                walk through the door, or until you change your mind.
               </p>
-              <p className="mt-1 font-mono text-sm font-semibold text-ink">{contractShort}</p>
-              <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <dt className="text-muted-foreground">Network</dt>
-                  <dd className="font-semibold capitalize text-ink">
-                    {APP_NETWORK === 'public' ? 'mainnet' : 'testnet'}
-                  </dd>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg">
+                  <Link href="/events">
+                    Get a pass <ArrowRight />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <a href={explorerContract()} target="_blank" rel="noopener noreferrer">
+                    Verify the contract <ExternalLink />
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div className="tk-seam flex flex-col gap-6 p-6 sm:w-72 sm:p-8 lg:w-80">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-primary">
+                  <Ticket className="h-5 w-5" />
+                  <span className="font-display text-sm font-semibold uppercase tracking-wider">
+                    General admission
+                  </span>
                 </div>
-                <div>
-                  <dt className="text-muted-foreground">Status</dt>
-                  <dd className="font-semibold text-success">Escrowed</dd>
-                </div>
-              </dl>
+                <QrCode className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Escrow contract
+                </p>
+                <p className="mt-1 font-mono text-sm font-semibold text-ink">{contractShort}</p>
+                <dl className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <dt className="text-muted-foreground">Network</dt>
+                    <dd className="font-semibold capitalize text-ink">
+                      {APP_NETWORK === 'public' ? 'mainnet' : 'testnet'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-muted-foreground">Status</dt>
+                    <dd className="font-semibold text-success">Escrowed</dd>
+                  </div>
+                </dl>
+              </div>
             </div>
           </div>
         </div>
@@ -304,22 +309,41 @@ export default function LandingPage() {
             nothing gets bolted on later.
           </p>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {ecosystemActors.map((a) => (
-            <div key={a.title} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+        <div
+          className="mt-10 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-4 pt-3"
+          style={{
+            maskImage:
+              'linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)',
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)',
+          }}
+        >
+          {ecosystemActors.map((a, i) => (
+            <div
+              key={a.title}
+              className={`tk-stub flex w-[240px] shrink-0 snap-start flex-col gap-3 rounded-2xl border p-5 shadow-sm ${
+                a.highlight ? 'border-accent/50 ring-1 ring-accent/30' : 'border-border'
+              }`}
+            >
+              <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Party {String(i + 1).padStart(2, '0')}
+              </span>
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <a.icon className="h-5 w-5" />
               </div>
-              <h3 className="mt-4 font-display text-lg font-bold text-ink">{a.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{a.body}</p>
+              <h3 className="font-display text-lg font-bold text-ink">{a.title}</h3>
+              <p className="text-sm text-muted-foreground">{a.body}</p>
             </div>
           ))}
-          <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-5">
+          <div className="tk-stub flex w-[280px] shrink-0 snap-start flex-col gap-3 rounded-2xl border border-dashed border-border bg-secondary/40 p-5">
+            <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Settlement
+            </span>
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-accent">
               <Coins className="h-5 w-5" />
             </div>
-            <h3 className="mt-4 font-display text-lg font-bold text-ink">Settlement</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{settlementNote}</p>
+            <h3 className="font-display text-lg font-bold text-ink">Default asset</h3>
+            <p className="text-sm text-muted-foreground">{settlementNote}</p>
           </div>
         </div>
       </section>
@@ -360,38 +384,46 @@ export default function LandingPage() {
         <p className="mt-2 max-w-2xl text-muted-foreground">
           Four entrypoints on the deployed contract. Nothing happens off it.
         </p>
-        <div className="mt-10 grid gap-4">
-          {contractSteps.map((s, i) => (
-            <div
-              key={s.fn}
-              className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-sm sm:flex-row sm:items-start"
+        <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <div className="px-6 pt-6 pb-8">
+            <span className="font-display text-sm font-bold uppercase tracking-widest text-primary">
+              Escrow receipt
+            </span>
+          </div>
+          <div className="tk-tear mx-6" />
+          <div className="px-6">
+            {contractSteps.map((s, i) => (
+              <div
+                key={s.fn}
+                className="grid grid-cols-[auto_1fr_auto] items-baseline gap-3 border-b border-dashed border-border py-4"
+              >
+                <span className="font-mono text-sm tabular-nums text-muted-foreground">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <p className="font-mono text-sm font-semibold text-ink">{s.fn}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
+                </div>
+                <span className="rounded bg-primary/10 px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                  {s.signer}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="px-6 py-5">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Contract ID — total settled here
+            </p>
+            <p className="mt-1 break-all font-mono text-sm font-semibold text-ink">{CONTRACT_ID}</p>
+            <a
+              href={explorerContract()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                <span className="font-display text-sm font-bold">{i + 1}</span>
-              </div>
-              <div>
-                <p className="flex items-center gap-2 font-mono text-sm font-semibold text-ink">
-                  <Code2 className="h-4 w-4 text-muted-foreground" />
-                  {s.fn}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-8 rounded-2xl border border-border bg-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Contract ID
-          </p>
-          <p className="mt-1 break-all font-mono text-sm font-semibold text-ink">{CONTRACT_ID}</p>
-          <a
-            href={explorerContract()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-          >
-            Read the deployed contract on stellar.expert <ExternalLink className="h-4 w-4" />
-          </a>
+              Read the deployed contract on stellar.expert <ExternalLink className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </section>
 
