@@ -20,9 +20,9 @@ Marketing landing page: [`/landing`](https://tiket-mu.vercel.app/landing)
 - [x] **User feedback iteration summary** — [feedback log](docs/user-feedback-log.md) and [improvement summary](docs/level5-feedback-iteration-summary.md)
 - [x] **Google Sheet response export** — [open native Google Sheet](https://docs.google.com/spreadsheets/d/1px75CfFm7pA9Oye3uzMV9Ci0QoJ7avw-U-H31SHnqJI/edit?usp=drivesdk)
 
-those resources. The Level 5 wallet and contract evidence in this repository is Stellar
-testnet evidence: `contracts/DEPLOYMENT.md` records that mainnet is not deployed. Replace the
-testnet contract and transaction links after the mainnet deployment is complete.
+those resources. The Level 5 cohort below was tested against the Stellar testnet
+deployment as part of the feedback process; the app itself now runs on Stellar
+mainnet (`contracts/DEPLOYMENT.md`), contract `CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I`.
 
 <details>
 <summary>Current evidence totals</summary>
@@ -296,14 +296,14 @@ Soroban contract.
 
 ### Network caveat
 
-`contracts/DEPLOYMENT.md` records that the live deployment is **Stellar testnet**.
-The mainnet banner in the README advertises a target deployment, but mainnet has
-not actually been deployed. The Level 5 evidence in this repository therefore
-references the testnet contract
-`CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4` and the testnet
-deployment, initialize, create-event, buy, and check-in transactions listed in
-[level5-proof-package.md](docs/level5-proof-package.md). Replace those links
-after a real mainnet deployment.
+The app runs on **Stellar mainnet** — contract `CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I`
+(`contracts/DEPLOYMENT.md`). The Level 5 cohort below was funded and exercised on
+**Stellar testnet** as part of the feedback process, so its evidence references
+the testnet contract `CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4`
+and the testnet deployment, initialize, create-event, buy, and check-in
+transactions listed in [level5-proof-package.md](docs/level5-proof-package.md).
+That's a record of the testing process, not a claim about which network the
+live app serves today.
 
 ### Verification quick path
 
