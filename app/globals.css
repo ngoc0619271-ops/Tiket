@@ -102,3 +102,28 @@ body {
 .tk-perf {
   border-left: 2px dashed hsl(var(--border));
 }
+
+/* Horizontal tear-line: raffle-ticket style perforation across a card,
+   with punch-hole notches at the left/right edges — the landing page's
+   own signature, distinct from the vertical tk-stub notches above. */
+.tk-tear {
+  position: relative;
+  border-top: 2px dashed hsl(var(--border));
+}
+.tk-tear::before,
+.tk-tear::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+}
+.tk-tear::before {
+  left: -10px;
+}
+.tk-tear::after {
+  right: -10px;
+}

@@ -1,5 +1,7 @@
 # Tiket — spec sheet
 
+Marketing landing page: [`/landing`](https://tiket-stellar.vercel.app/landing)
+
 ## Submission Checklist
 
 ### Delivery
