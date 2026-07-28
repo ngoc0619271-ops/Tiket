@@ -119,6 +119,80 @@ const contractSteps = [
   },
 ];
 
+function EscrowStateDiagram() {
+  return (
+    <div className="relative mx-auto mt-10 aspect-[16/8] w-full max-w-3xl sm:aspect-[16/6]">
+      <svg
+        viewBox="0 0 320 160"
+        preserveAspectRatio="none"
+        className="absolute inset-0 h-full w-full"
+        aria-hidden="true"
+      >
+        <defs>
+          <marker
+            id="escrow-arrow-success"
+            markerWidth="6"
+            markerHeight="6"
+            refX="5"
+            refY="3"
+            orient="auto"
+          >
+            <path d="M0,0 L6,3 L0,6 z" fill="hsl(var(--success))" />
+          </marker>
+          <marker
+            id="escrow-arrow-accent"
+            markerWidth="6"
+            markerHeight="6"
+            refX="5"
+            refY="3"
+            orient="auto"
+          >
+            <path d="M0,0 L6,3 L0,6 z" fill="hsl(var(--accent))" />
+          </marker>
+        </defs>
+        <path
+          d="M 96 80 C 144 80, 144 27, 189 27"
+          fill="none"
+          stroke="hsl(var(--success))"
+          strokeWidth="2"
+          markerEnd="url(#escrow-arrow-success)"
+        />
+        <path
+          d="M 96 80 C 144 80, 144 133, 189 133"
+          fill="none"
+          stroke="hsl(var(--accent))"
+          strokeWidth="2"
+          markerEnd="url(#escrow-arrow-accent)"
+        />
+      </svg>
+      {lifecycleSteps.map((s, i) => {
+        const position =
+          i === 0
+            ? 'left-0 top-[38%] w-[30%]'
+            : i === 1
+              ? 'right-0 top-0 w-[38%]'
+              : 'right-0 bottom-0 w-[38%]';
+        return (
+          <div
+            key={s.title}
+            className={`absolute ${position} rounded-2xl border border-primary-foreground/25 bg-primary-foreground/10 p-3 backdrop-blur sm:p-4`}
+          >
+            <div className="flex items-center gap-2">
+              <s.icon className="h-4 w-4 shrink-0 text-primary-foreground" />
+              <span className="font-display text-sm font-bold text-primary-foreground">
+                {i === 0 ? 'Bought' : i === 1 ? 'Checked in' : 'Refunded'}
+              </span>
+            </div>
+            <p className="mt-1 hidden text-xs text-primary-foreground/70 sm:block">
+              {i === 0 ? 'Held in escrow' : i === 1 ? 'Released to organizer' : 'Returned to buyer'}
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function LandingPage() {
   return (
     <main>
@@ -184,18 +258,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden border-y border-border">
-        <div className="absolute inset-0">
-          <img
-            src="/images/landing/panoramic-concert-crowd-248963.jpg"
-            alt="A band on stage, seen past a crowd of raised hands under white stage lights"
-            width={1600}
-            height={763}
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/40 via-ink/80 to-ink/95" />
-        </div>
+      <section className="relative overflow-hidden border-y border-border bg-ink">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/35 via-ink to-ink" />
+        <div className="tk-grid absolute inset-0 opacity-30" />
         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <h2 className="font-display text-3xl font-bold tracking-tight text-primary-foreground">
             Where your money actually sits
@@ -204,6 +269,7 @@ export default function LandingPage() {
             Every pass moves through one of three states below. No one behind a desk picks which one
             — the contract does.
           </p>
+          <EscrowStateDiagram />
           <div className="mt-10 grid gap-8 sm:grid-cols-3 sm:gap-6">
             {lifecycleSteps.map((s, i) => (
               <div key={s.title} className="relative">
@@ -229,29 +295,14 @@ export default function LandingPage() {
       </section>
 
       <section id="ecosystem" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:px-6">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="font-display text-3xl font-bold tracking-tight text-ink">
-              Who&apos;s actually in this
-            </h2>
-            <p className="mt-2 max-w-2xl text-muted-foreground">
-              Five parties touch an escrowed ticket, start to finish. That&apos;s the entire list —
-              nothing gets bolted on later.
-            </p>
-          </div>
-          <figure className="hidden w-40 shrink-0 overflow-hidden rounded-2xl border border-border shadow-sm sm:block">
-            <img
-              src="/images/landing/kadayawan-festival-22622230.jpg"
-              alt="Dancers in traditional costume at the Kadayawan Festival in Davao, Philippines"
-              width={1600}
-              height={1067}
-              loading="lazy"
-              className="h-28 w-full object-cover"
-            />
-            <figcaption className="bg-card px-3 py-2 text-xs text-muted-foreground">
-              Concerts, fun runs, town fiestas — wherever a door needs checking.
-            </figcaption>
-          </figure>
+        <div>
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink">
+            Who&apos;s actually in this
+          </h2>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            Five parties touch an escrowed ticket, start to finish. That&apos;s the entire list —
+            nothing gets bolted on later.
+          </p>
         </div>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ecosystemActors.map((a) => (
@@ -360,17 +411,7 @@ export default function LandingPage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <div className="relative flex flex-col items-start justify-between gap-4 overflow-hidden rounded-2xl px-6 py-7 text-primary-foreground sm:flex-row sm:items-center">
-          <div className="absolute inset-0">
-            <img
-              src="/images/landing/stage-silhouette-1763067.jpg"
-              alt="Silhouetted crowd with hands raised against blue stage lighting"
-              width={1600}
-              height={1068}
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-primary/85" />
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-br from-primary to-ink" />
           <div className="relative">
             <p className="font-display text-xl font-bold">Go find something worth going to.</p>
             <p className="mt-1 text-sm text-primary-foreground/80">
