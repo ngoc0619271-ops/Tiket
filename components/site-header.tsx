@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { ConnectButton } from '@/components/connect-button';
 import { NetworkBadge } from '@/components/network-badge';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const nav = [
@@ -18,6 +19,24 @@ const nav = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  if (pathname === '/landing') {
+    return (
+      <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+          <Link href="/landing" className="flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+              <TicketCheck className="h-5 w-5" />
+            </span>
+            <span className="font-display text-xl font-bold tracking-tight">Tiket</span>
+          </Link>
+          <Button asChild size="sm">
+            <Link href="/events">Launch app</Link>
+          </Button>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
