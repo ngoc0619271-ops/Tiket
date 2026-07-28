@@ -31,16 +31,21 @@ const contractShort = CONTRACT_ID
   ? `${CONTRACT_ID.slice(0, 6)}…${CONTRACT_ID.slice(-6)}`
   : 'not configured';
 
-const lifecycle = [
+const lifecycleSteps = [
   {
     icon: Wallet,
     title: 'Buy',
-    body: 'Price escrows into the contract the moment you buy. Nobody holds it — the ledger does.',
+    body: 'Price escrows into the contract the moment you buy, and it stays there. No one else can touch it.',
   },
   {
     icon: ScanLine,
     title: 'Check in',
-    body: 'The organizer scans you at the door. The contract releases escrow to them and marks the pass Used.',
+    body: 'The organizer scans you at the door. That scan releases the escrow to them and marks your pass Used.',
+  },
+  {
+    icon: Undo2,
+    title: 'Or refund',
+    body: 'Change your mind before the event starts and you can pull your escrow back yourself, no support ticket. Once the event starts, that door closes.',
   },
 ];
 
@@ -75,15 +80,15 @@ const ecosystemActors = [
 ];
 
 const settlementNote =
-  'Default settlement is native XLM via the Stellar Asset Contract — no trustline required to buy. USDC support is opt-in: a one-tap trustline lets a wallet hold USDC alongside its XLM.';
+  'Default settlement is native XLM through the Stellar Asset Contract, so buying a ticket never requires a trustline. Want to hold USDC too? A one-tap trustline adds that, whenever you want it.';
 
 const roadmapLiveNow = [
-  'Escrowed purchase — price locks into the contract on buy',
-  'Settle-on-attendance — escrow releases to the organizer on check-in',
-  'Pre-event refund — buyers reclaim escrow directly from the contract',
-  'Organizer cancel — stops further sales, existing tickets stay refundable',
+  'Escrowed purchase, price locks into the contract on buy',
+  'Settle-on-attendance, escrow releases to the organizer on check-in',
+  'Pre-event refund, buyers reclaim escrow directly from the contract',
+  'Organizer cancel, stops further sales while existing tickets stay refundable',
   'Wallet auth via Freighter, session-backed',
-  'Native XLM default settlement, USDC opt-in trustline',
+  'Native XLM by default, USDC as an opt-in trustline',
   'Live on-chain usage stats and explorer receipts',
   'Deployed and running on Stellar mainnet',
 ];
@@ -98,19 +103,19 @@ const roadmapNext = [
 const contractSteps = [
   {
     fn: 'create_event(organizer, price, capacity, start_time)',
-    body: 'Organizer-signed. Records the event; rejects a zero capacity or a start time in the past.',
+    body: 'Organizer-signed. Sets up the event on-chain. Won’t accept a zero capacity, and won’t accept a start time that’s already in the past.',
   },
   {
     fn: 'buy(event_id, buyer)',
-    body: 'Buyer-signed. Transfers the price from buyer to the contract’s own address and records a Valid ticket. Free events skip the transfer.',
+    body: 'Buyer-signed. Moves the price from the buyer into the contract’s own address and logs a Valid ticket. Free events skip that transfer entirely.',
   },
   {
     fn: 'check_in(ticket_id)',
-    body: 'Organizer-signed, organizer-only. Transfers the escrowed price from the contract to the organizer and flips the ticket to Used. Fails if already Used or Refunded.',
+    body: 'Organizer-signed, and only the organizer can call it. Pays the escrowed price out to them and flips the ticket to Used. Won’t run on a ticket that’s already Used or Refunded.',
   },
   {
     fn: 'refund(ticket_id)',
-    body: 'Ticket-owner-signed. Only before the event’s start_time — transfers the escrow back to the buyer and flips the ticket to Refunded. Fails once the event has started or the ticket already moved.',
+    body: 'Ticket-owner-signed, and only before the event’s start_time. Sends the escrow back to the buyer and flips the ticket to Refunded. Once the event starts, or the ticket’s already moved, this stops working.',
   },
 ];
 
@@ -128,9 +133,9 @@ export default function LandingPage() {
               Admission that <span className="text-primary">settles itself.</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-              A Tiket pass isn&apos;t a QR code someone screenshots — it&apos;s an escrow. The price
-              sits in a Soroban contract from the moment you buy until the moment you walk in, or
-              the moment you change your mind.
+              A Tiket pass isn&apos;t a QR code you screenshot and hope works — it&apos;s an escrow.
+              The price sits inside a Soroban contract from the second you buy until you walk
+              through the door, or until you change your mind.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
@@ -179,56 +184,75 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-ink">
-          Not held. Escrowed.
-        </h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          Two ways a pass ends: you attend, or you don&apos;t. Either way the contract — not an
-          intermediary — decides where the money goes.
-        </p>
-        <div className="mt-10 flex flex-col gap-0 md:flex-row md:items-stretch">
-          {lifecycle.map((s, i) => (
-            <div key={s.title} className="flex flex-1 items-start gap-4 md:items-center">
-              <div className="flex flex-col items-center gap-2">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <s.icon className="h-5 w-5" />
+      <section className="relative overflow-hidden border-y border-border">
+        <div className="absolute inset-0">
+          <img
+            src="/images/landing/panoramic-concert-crowd-248963.jpg"
+            alt="A band on stage, seen past a crowd of raised hands under white stage lights"
+            width={1600}
+            height={763}
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/40 via-ink/80 to-ink/95" />
+        </div>
+        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-primary-foreground">
+            Where your money actually sits
+          </h2>
+          <p className="mt-2 max-w-2xl text-primary-foreground/80">
+            Every pass moves through one of three states below. No one behind a desk picks which one
+            — the contract does.
+          </p>
+          <div className="mt-10 grid gap-8 sm:grid-cols-3 sm:gap-6">
+            {lifecycleSteps.map((s, i) => (
+              <div key={s.title} className="relative">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-foreground/10 text-primary-foreground ring-1 ring-primary-foreground/30 backdrop-blur">
+                    <s.icon className="h-5 w-5" />
+                  </div>
+                  <span className="font-display text-xs font-semibold uppercase tracking-wider text-primary-foreground/50">
+                    Step {i + 1}
+                  </span>
                 </div>
-                {i < lifecycle.length - 1 && (
-                  <div className="hidden h-px flex-1 bg-border md:block md:h-px md:w-full" />
+                <h3 className="mt-3 font-display text-lg font-bold text-primary-foreground">
+                  {s.title}
+                </h3>
+                <p className="mt-1 text-sm text-primary-foreground/75">{s.body}</p>
+                {i < lifecycleSteps.length - 1 && (
+                  <div className="mt-6 hidden h-px w-full bg-primary-foreground/20 sm:block" />
                 )}
               </div>
-              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:flex-1">
-                <h3 className="font-display text-lg font-bold text-ink">{s.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
-              </div>
-              {i < lifecycle.length - 1 && (
-                <div className="hidden h-px w-10 self-center bg-border md:block" />
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="mt-6 flex items-start gap-4 rounded-2xl border border-dashed border-border bg-secondary/40 p-5">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent">
-            <Undo2 className="h-5 w-5" />
-          </div>
-          <div>
-            <h3 className="font-display text-lg font-bold text-ink">Or refund</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Plans change before the event starts — reclaim your escrowed price directly from the
-              contract, no support ticket required.
-            </p>
+            ))}
           </div>
         </div>
       </section>
 
       <section id="ecosystem" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:px-6">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-ink">
-          Who&apos;s actually in this
-        </h2>
-        <p className="mt-2 max-w-2xl text-muted-foreground">
-          No token, no partner network — just the parties an escrow ticket actually touches.
-        </p>
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-ink">
+              Who&apos;s actually in this
+            </h2>
+            <p className="mt-2 max-w-2xl text-muted-foreground">
+              Five parties touch an escrowed ticket, start to finish. That&apos;s the entire list —
+              nothing gets bolted on later.
+            </p>
+          </div>
+          <figure className="hidden w-40 shrink-0 overflow-hidden rounded-2xl border border-border shadow-sm sm:block">
+            <img
+              src="/images/landing/kadayawan-festival-22622230.jpg"
+              alt="Dancers in traditional costume at the Kadayawan Festival in Davao, Philippines"
+              width={1600}
+              height={1067}
+              loading="lazy"
+              className="h-28 w-full object-cover"
+            />
+            <figcaption className="bg-card px-3 py-2 text-xs text-muted-foreground">
+              Concerts, fun runs, town fiestas — wherever a door needs checking.
+            </figcaption>
+          </figure>
+        </div>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ecosystemActors.map((a) => (
             <div key={a.title} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -255,35 +279,25 @@ export default function LandingPage() {
             Live now, and where it&apos;s headed
           </h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Direction, not a promise — no dates or version numbers attached.
+            Nothing below has a date on it. This is direction, and direction can change.
           </p>
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-success">
-                Live now
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {roadmapLiveNow.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-dashed border-border bg-card p-6 shadow-sm">
-              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-primary">
-                What&apos;s next
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {roadmapNext.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Compass className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="mt-10 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+            {roadmapLiveNow.map((item) => (
+              <div key={item} className="flex items-center gap-4 p-4 sm:p-5">
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-success/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-success">
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Live
+                </span>
+                <span className="text-sm text-ink">{item}</span>
+              </div>
+            ))}
+            {roadmapNext.map((item) => (
+              <div key={item} className="flex items-center gap-4 p-4 sm:p-5">
+                <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+                  <Compass className="h-3.5 w-3.5" /> Next
+                </span>
+                <span className="text-sm text-muted-foreground">{item}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -293,7 +307,7 @@ export default function LandingPage() {
           How the escrow actually works
         </h2>
         <p className="mt-2 max-w-2xl text-muted-foreground">
-          Four entrypoints on the deployed Soroban contract — no off-chain custodian.
+          Four entrypoints on the deployed contract. Nothing happens off it.
         </p>
         <div className="mt-10 grid gap-4">
           {contractSteps.map((s, i) => (
@@ -314,23 +328,29 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
-        <a
-          href={explorerContract()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-        >
-          Read the deployed contract on stellar.expert <ExternalLink className="h-4 w-4" />
-        </a>
+        <div className="mt-8 rounded-2xl border border-border bg-card p-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Contract ID
+          </p>
+          <p className="mt-1 break-all font-mono text-sm font-semibold text-ink">{CONTRACT_ID}</p>
+          <a
+            href={explorerContract()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+          >
+            Read the deployed contract on stellar.expert <ExternalLink className="h-4 w-4" />
+          </a>
+        </div>
       </section>
 
       <section className="border-t border-border bg-secondary/30">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <h2 className="font-display text-3xl font-bold tracking-tight text-ink">
-            Real numbers, not projections
+            What&apos;s actually happened here
           </h2>
           <p className="mt-2 max-w-2xl text-muted-foreground">
-            Pulled live from this deployment&apos;s sessions and on-chain ticket records.
+            Straight from this deployment&apos;s sessions and the ticket records on-chain.
           </p>
           <div className="mt-8">
             <LiveBoard />
@@ -339,14 +359,25 @@ export default function LandingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl bg-primary px-6 py-7 text-primary-foreground sm:flex-row sm:items-center">
-          <div>
-            <p className="font-display text-xl font-bold">Your money, your contract, your call.</p>
+        <div className="relative flex flex-col items-start justify-between gap-4 overflow-hidden rounded-2xl px-6 py-7 text-primary-foreground sm:flex-row sm:items-center">
+          <div className="absolute inset-0">
+            <img
+              src="/images/landing/stage-silhouette-1763067.jpg"
+              alt="Silhouetted crowd with hands raised against blue stage lighting"
+              width={1600}
+              height={1068}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-primary/85" />
+          </div>
+          <div className="relative">
+            <p className="font-display text-xl font-bold">Go find something worth going to.</p>
             <p className="mt-1 text-sm text-primary-foreground/80">
-              Browse events and buy an escrowed pass — no wallet needed until checkout.
+              Browse events and buy an escrowed pass. You don&apos;t need a wallet until checkout.
             </p>
           </div>
-          <Button asChild variant="accent" size="lg">
+          <Button asChild variant="accent" size="lg" className="relative">
             <Link href="/events">
               Browse events <ArrowRight />
             </Link>
