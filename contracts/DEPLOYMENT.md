@@ -1,5 +1,15 @@
 # Tiket Ticketing — Deployment Record
 
+## Mainnet (live)
+
+- **Contract ID:** `CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I`
+- **Wasm hash:** `781e2616387a68e4f90f96011f72574862fdbf96edcc8f8661970b921b47ccfe`
+- **Creator:** `GDVSK3WR5N5LVMBPHVX6VXCJLLKA5YBUG236G5EYDVV2PTNU6MIZRZ2M`
+- **Network passphrase:** `Public Global Stellar Network ; September 2015`
+- **Deploy date:** 2026-06-30 (recovered from stellar.expert; not recorded here at the time)
+
+Explorer: https://stellar.expert/explorer/public/contract/CDIQ6JCW6UGLKBNINAJKTDRICA5ZRP5MNS6HGB7I3NRTYRTDRDHO7Y6I
+
 ## Testnet (live)
 
 - **Contract ID:** `CAG6O27M45PQEXW7MSAVR5VLTCGUWF2JDXSNLNKMGASM2VJZ7XXDCYL4`
@@ -42,7 +52,3 @@ stellar contract invoke --id <CID> --source tiket-deployer --network testnet -- 
 | `refund(ticket_id) -> i128` | owner | return escrow to buyer before start, mark Refunded |
 | `cancel_event(event_id)` | organizer | stop further sales |
 | `get_event / get_ticket / total_events / total_tickets / get_admin / get_token` | read | views |
-
-## Mainnet
-Not deployed. Switch: rebuild, `stellar contract deploy ... --network mainnet`,
-re-`initialize` with the mainnet XLM SAC, set `SOROBAN_CONTRACT_ID` + `STELLAR_NETWORK=public`.
