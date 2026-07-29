@@ -84,7 +84,10 @@ export default function HomePage() {
                 <p className="mt-4 font-display text-2xl font-bold text-ink">
                   Stellar Builders Night
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">Testnet · General admission</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'public' ? 'Mainnet' : 'Testnet'} · General
+                  admission
+                </p>
                 <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <dt className="text-muted-foreground">Asset</dt>
