@@ -9,8 +9,8 @@ Marketing landing page: [`/landing`](https://tiket-mu.vercel.app/landing)
 - [x] **Live deployed application** — https://tiket-mu.vercel.app
 - [ ] **Public GitHub repository** — add the public repository link
 - [ ] **Minimum 20+ meaningful commits** — verify the commit history on `main`
-- [ ] **PPT/Pitch deck link** — add the deck link
-- [ ] **Demo video link** — add the demo link
+- [x] **PPT/Pitch deck link** — [View Pitch Deck](https://docs.google.com/presentation/d/1u_BfOLNx8ycRC7JK4lFbd8Y9KvLQtaEZ/edit?usp=sharing)
+- [x] **Demo video link** — [Watch Demo](https://drive.google.com/file/d/1Q3t1gutU48HsQU_FE-uG-q5CnwioL3YU/view?usp=sharing)
 
 ### Proof
 
