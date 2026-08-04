@@ -1,6 +1,6 @@
 import { integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
-export const events = pgTable('events', {
+export const events = pgTable('tiket_events', {
   id: uuid('id').defaultRandom().primaryKey(),
   organizerPublicKey: text('organizer_public_key').notNull(),
   name: text('name').notNull(),

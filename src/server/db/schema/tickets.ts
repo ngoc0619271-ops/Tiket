@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { events } from './events';
 
-export const tickets = pgTable('tickets', {
+export const tickets = pgTable('tiket_tickets', {
   id: uuid('id').defaultRandom().primaryKey(),
   eventId: uuid('event_id')
     .notNull()
