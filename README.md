@@ -135,7 +135,7 @@ Auth is enforced with `require_auth`; the source-account signature on the submit
 | Wasm hash | `781e2616387a68e4f90f96011f72574862fdbf96edcc8f8661970b921b47ccfe` |
 | Admin / deployer | `GDVSK3WR5N5LVMBPHVX6VXCJLLKA5YBUG236G5EYDVV2PTNU6MIZRZ2M` |
 | Settlement token (XLM SAC) | `CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA` |
-| Soroban RPC | ` |
+| Soroban RPC | `https://mainnet.sorobanrpc.com` |
 | Deploy tx | `d1745e753ffc771feb2c134931c6225990ad07b7a6f58101dcc85e0259ec418a` |
 | Init tx | `a02333cd0be96c36c602887645eb0deed8f301633e73cc79b6dcde47bdddccb4` |
 | First `create_event` tx (Stellar Hackathon) | `63466df584e64a35174230d88397f75ca554b62bd11351dc73aa3b2eeb4643bb` |
@@ -202,9 +202,9 @@ All responses use the `{ ok, data }` / `{ ok, error }` envelope.
 | `NEXT_PUBLIC_APP_URL` | no | `http://localhost:3001` |
 | `NEXT_PUBLIC_STELLAR_NETWORK` | no | `testnet` (or `public`) |
 | `STELLAR_NETWORK` | no | `testnet` |
-| `STELLAR_HORIZON_URL` | no | ` |
+| `STELLAR_HORIZON_URL` | no | `https://horizon-testnet.stellar.org` |
 | `STELLAR_NETWORK_PASSPHRASE` | no | `Test SDF Network ; September 2015` |
-| `SOROBAN_RPC_URL` | no | ` |
+| `SOROBAN_RPC_URL` | no | `https://soroban-testnet.stellar.org` |
 | `SOROBAN_CONTRACT_ID` | no | defaults to the deployed testnet id |
 | `NEXT_PUBLIC_SOROBAN_CONTRACT_ID` | no | same id, client-side |
 | `SOROBAN_TOKEN_SAC` | no | XLM SAC settlement token |
