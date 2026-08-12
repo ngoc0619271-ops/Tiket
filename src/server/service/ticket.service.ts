@@ -1,4 +1,4 @@
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, lt } from 'drizzle-orm';
 import { db } from '@/server/db/client';
 import { tickets } from '@/server/db/schema';
 import type { Ticket } from '@/server/db/schema/tickets';
@@ -75,12 +75,26 @@ export const ticketService = {
     return ticket;
   },
 
-  async listByEvent(eventId: string): Promise<Ticket[]> {
-    return db
+  async listByEvent(
+    eventId: string,
+    opts: { status?: string; cursor?: string; limit?: number } = {},
+  ): Promise<{ tickets: Ticket[]; nextCursor: string | null }> {
+    const limit = opts.limit ?? 20;
+    const conditions = [eq(tickets.eventId, eventId)];
+    if (opts.status) conditions.push(eq(tickets.status, opts.status));
+    if (opts.cursor) conditions.push(lt(tickets.createdAt, new Date(opts.cursor)));
+
+    const rows = await db
       .select()
       .from(tickets)
-      .where(eq(tickets.eventId, eventId))
-      .orderBy(desc(tickets.createdAt));
+      .where(and(...conditions))
+      .orderBy(desc(tickets.createdAt))
+      .limit(limit + 1);
+
+    const hasMore = rows.length > limit;
+    const page = hasMore ? rows.slice(0, limit) : rows;
+    const nextCursor = hasMore ? page[page.length - 1].createdAt.toISOString() : null;
+    return { tickets: page, nextCursor };
   },
 
   async listByBuyer(buyer: string): Promise<Ticket[]> {

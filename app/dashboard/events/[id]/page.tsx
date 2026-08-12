@@ -21,28 +21,65 @@ import { get, post } from '@/lib/api';
 import { type EventDTO, formatDate, formatPrice, type TicketDTO } from '@/lib/format';
 import { explorerContract, explorerTx, shortKey } from '@/lib/stellar-client';
 
-type Detail = {
-  event: EventDTO & { remaining: number };
-  isOrganizer: boolean;
-  tickets: TicketDTO[];
-};
+type EventDetail = { event: EventDTO & { remaining: number }; isOrganizer: boolean };
+type TicketPage = { tickets: TicketDTO[]; nextCursor: string | null };
+
+const STATUS_FILTERS = [
+  { value: 'all', label: 'All' },
+  { value: 'issued', label: 'Valid' },
+  { value: 'used', label: 'Checked in' },
+  { value: 'refunded', label: 'Refunded' },
+] as const;
+type StatusFilter = (typeof STATUS_FILTERS)[number]['value'];
 
 export default function ManageEventPage() {
   const { id } = useParams<{ id: string }>();
   const { status, signXdr } = useWallet();
-  const [data, setData] = useState<Detail | null>(null);
+  const [detail, setDetail] = useState<EventDetail | null>(null);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [tickets, setTickets] = useState<TicketDTO[]>([]);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [checking, setChecking] = useState<string | null>(null);
 
+  const fetchTicketPage = useCallback(
+    (cursor?: string) => {
+      const query = new URLSearchParams();
+      if (statusFilter !== 'all') query.set('status', statusFilter);
+      if (cursor) query.set('cursor', cursor);
+      return get<EventDetail & TicketPage>(`/api/events/${id}?${query}`);
+    },
+    [id, statusFilter],
+  );
+
   const load = useCallback(() => {
-    get<Detail>(`/api/events/${id}`)
-      .then(setData)
+    fetchTicketPage()
+      .then((d) => {
+        setDetail({ event: d.event, isOrganizer: d.isOrganizer });
+        setTickets(d.tickets);
+        setNextCursor(d.nextCursor);
+      })
       .catch(() => toast.error('Could not load event'));
-  }, [id]);
+  }, [fetchTicketPage]);
 
   useEffect(() => {
     if (status === 'loading') return;
     load();
   }, [load, status]);
+
+  async function loadMore() {
+    if (!nextCursor) return;
+    setLoadingMore(true);
+    try {
+      const page = await fetchTicketPage(nextCursor);
+      setTickets((prev) => [...prev, ...page.tickets]);
+      setNextCursor(page.nextCursor);
+    } catch {
+      toast.error('Could not load more attendees');
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   async function checkin(ticketId: string) {
     setChecking(ticketId);
@@ -67,7 +104,7 @@ export default function ManageEventPage() {
     }
   }
 
-  if (!data) {
+  if (!detail) {
     return (
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
         <div className="h-40 animate-pulse rounded-2xl border border-border bg-card" />
@@ -75,7 +112,7 @@ export default function ManageEventPage() {
     );
   }
 
-  const { event, isOrganizer, tickets } = data;
+  const { event, isOrganizer } = detail;
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
@@ -130,6 +167,25 @@ export default function ManageEventPage() {
           <h2 className="font-display text-lg font-bold text-ink">Attendees &amp; check-in</h2>
         </div>
 
+        {status === 'connected' && isOrganizer && (
+          <div className="mb-4 flex flex-wrap gap-2">
+            {STATUS_FILTERS.map((f) => (
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => setStatusFilter(f.value)}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                  statusFilter === f.value
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-muted-foreground hover:bg-secondary/70'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {status !== 'connected' ? (
           <div className="rounded-2xl border border-dashed border-border bg-card py-12 text-center">
             <Wallet className="mx-auto h-8 w-8 text-muted-foreground" />
@@ -148,7 +204,9 @@ export default function ManageEventPage() {
           <div className="rounded-2xl border border-dashed border-border bg-card py-12 text-center">
             <ScanLine className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-3 text-sm text-muted-foreground">
-              No passes sold yet. Share your event page to start selling.
+              {statusFilter === 'all'
+                ? 'No passes sold yet. Share your event page to start selling.'
+                : 'No attendees match this filter.'}
             </p>
           </div>
         ) : (
@@ -193,6 +251,20 @@ export default function ManageEventPage() {
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {nextCursor && (
+          <div className="mt-4 flex justify-center">
+            <Button variant="outline" onClick={loadMore} disabled={loadingMore}>
+              {loadingMore ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Loading…
+                </>
+              ) : (
+                'Load more'
+              )}
+            </Button>
           </div>
         )}
       </section>

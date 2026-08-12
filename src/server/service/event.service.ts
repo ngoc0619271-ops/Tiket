@@ -1,9 +1,10 @@
-import { desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, lt, sql } from 'drizzle-orm';
 import { env } from '@/server/config/env';
 import { db } from '@/server/db/client';
 import { events } from '@/server/db/schema';
 import type { Event } from '@/server/db/schema/events';
 import { AppError } from '@/server/lib/http';
+import { logger } from '@/server/lib/logger';
 import {
   buildCreateEventXdr,
   generateAssetCode,
@@ -103,10 +104,19 @@ export const eventService = {
   },
 
   async incrementSoldCount(eventId: string): Promise<void> {
-    await db
+    const [updated] = await db
       .update(events)
       .set({ soldCount: sql`${events.soldCount} + 1` })
-      .where(eq(events.id, eventId));
+      .where(and(eq(events.id, eventId), lt(events.soldCount, events.totalCapacity)))
+      .returning({ id: events.id });
+
+    if (!updated) {
+      logger.warn(
+        'incrementSoldCount: capacity already reached in the DB mirror',
+        'eventId=',
+        eventId,
+      );
+    }
   },
 
   async incrementUsedCount(eventId: string): Promise<void> {
