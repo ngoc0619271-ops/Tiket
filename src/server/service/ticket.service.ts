@@ -140,6 +140,8 @@ export const ticketService = {
     if (event.organizerPublicKey !== params.organizer) {
       throw new AppError('FORBIDDEN', 'Only the event organizer can check in tickets', 403);
     }
+    if (ticket.status === 'used') throw new AppError('CONFLICT', 'Ticket already checked in', 409);
+    if (ticket.status === 'refunded') throw new AppError('CONFLICT', 'Ticket was refunded', 409);
 
     const { hash } = await submitAndPoll(params.signedXdr);
 
