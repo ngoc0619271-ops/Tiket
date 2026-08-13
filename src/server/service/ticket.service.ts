@@ -42,6 +42,9 @@ export const ticketService = {
     signedXdr: string;
   }): Promise<Ticket> {
     const event = await eventService.getEvent(params.eventId);
+    if (event.status !== 'active') {
+      throw new AppError('CONFLICT', 'Event is not on sale', 409);
+    }
     if (event.soldCount >= event.totalCapacity) {
       throw new AppError('CONFLICT', 'Event is sold out', 409);
     }
