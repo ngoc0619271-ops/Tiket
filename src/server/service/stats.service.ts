@@ -27,7 +27,10 @@ export const statsService = {
       .from(sessions)
       .where(sessionWhere);
 
-    const [eventRow] = await db.select({ c: sql<number>`count(*)` }).from(events);
+    const [eventRow] = await db
+      .select({ c: sql<number>`count(*)` })
+      .from(events)
+      .where(DEMO_KEYS.length > 0 ? notInArray(events.organizerPublicKey, DEMO_KEYS) : undefined);
 
     const ticketWhere =
       DEMO_KEYS.length > 0 ? notInArray(tickets.buyerPublicKey, DEMO_KEYS) : undefined;
