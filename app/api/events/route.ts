@@ -7,6 +7,12 @@ import { explorerTx } from '@/server/stellar';
 
 export const maxDuration = 60;
 
+const listEventsQuerySchema = z.object({
+  organizer: z.string().min(1).optional(),
+  cursor: z.string().datetime().optional(),
+  limit: z.coerce.number().int().positive().max(100).optional(),
+});
+
 const createEventSchema = z.object({
   name: z.string().min(2).max(100),
   description: z.string().min(1).max(600),
@@ -24,9 +30,12 @@ const createEventSchema = z.object({
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const organizer = searchParams.get('organizer');
-    const eventList = await eventService.listEvents(organizer ?? undefined);
-    return ok({ events: eventList });
+    const query = listEventsQuerySchema.parse(Object.fromEntries(searchParams));
+    const { events: eventList, nextCursor } = await eventService.listEvents(
+      query.organizer,
+      { cursor: query.cursor, limit: query.limit },
+    );
+    return ok({ events: eventList, nextCursor });
   } catch (err) {
     return fromError(err);
   }

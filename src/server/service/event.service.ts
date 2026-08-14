@@ -92,15 +92,26 @@ export const eventService = {
     return event;
   },
 
-  async listEvents(organizerPublicKey?: string): Promise<Event[]> {
-    if (organizerPublicKey) {
-      return db
-        .select()
-        .from(events)
-        .where(eq(events.organizerPublicKey, organizerPublicKey))
-        .orderBy(desc(events.createdAt));
-    }
-    return db.select().from(events).orderBy(desc(events.createdAt));
+  async listEvents(
+    organizerPublicKey?: string,
+    opts: { cursor?: string; limit?: number } = {},
+  ): Promise<{ events: Event[]; nextCursor: string | null }> {
+    const limit = opts.limit ?? 20;
+    const conditions = [];
+    if (organizerPublicKey) conditions.push(eq(events.organizerPublicKey, organizerPublicKey));
+    if (opts.cursor) conditions.push(lt(events.createdAt, new Date(opts.cursor)));
+
+    const rows = await db
+      .select()
+      .from(events)
+      .where(conditions.length ? and(...conditions) : undefined)
+      .orderBy(desc(events.createdAt))
+      .limit(limit + 1);
+
+    const hasMore = rows.length > limit;
+    const page = hasMore ? rows.slice(0, limit) : rows;
+    const nextCursor = hasMore ? page[page.length - 1].createdAt.toISOString() : null;
+    return { events: page, nextCursor };
   },
 
   async incrementSoldCount(eventId: string): Promise<void> {
