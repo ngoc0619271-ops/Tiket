@@ -100,12 +100,25 @@ export const ticketService = {
     return { tickets: page, nextCursor };
   },
 
-  async listByBuyer(buyer: string): Promise<Ticket[]> {
-    return db
+  async listByBuyer(
+    buyer: string,
+    opts: { cursor?: string; limit?: number } = {},
+  ): Promise<{ tickets: Ticket[]; nextCursor: string | null }> {
+    const limit = opts.limit ?? 20;
+    const conditions = [eq(tickets.buyerPublicKey, buyer)];
+    if (opts.cursor) conditions.push(lt(tickets.createdAt, new Date(opts.cursor)));
+
+    const rows = await db
       .select()
       .from(tickets)
-      .where(eq(tickets.buyerPublicKey, buyer))
-      .orderBy(desc(tickets.createdAt));
+      .where(and(...conditions))
+      .orderBy(desc(tickets.createdAt))
+      .limit(limit + 1);
+
+    const hasMore = rows.length > limit;
+    const page = hasMore ? rows.slice(0, limit) : rows;
+    const nextCursor = hasMore ? page[page.length - 1].createdAt.toISOString() : null;
+    return { tickets: page, nextCursor };
   },
 
   // --- Check-in (organizer-signed) -----------------------------------------
